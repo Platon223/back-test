@@ -1,28 +1,32 @@
+const http = require('http');
+const { Server } = require('socket.io');
 const express = require('express');
 const cors = require('cors');
-const { Server } = require('socket.io');
+
+
 
 const app = express();
-const PORT = 4000;
-
-
-app.use(cors({
-    origin: 'http://127.0.0.1:5500',
-}));
-
-
-app.use(express.static('public'));
-
-const server = app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
-
-
+const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: 'http://127.0.0.1:5500',
-    }
+        origin: "*", // For production, specify the exact origin
+    },
 });
+
+// Serve static files (if needed)
+app.use(express.static('public')); 
+
+app.use(cors({
+  origin: "https://incandescent-meerkat-bbc6c7.netlify.app", // Replace with your Netlify domain
+  credentials: true, // If you're using cookies or authentication
+}));
+
+const port = process.env.PORT || 3000;
+
+server.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});
+
 
 let users = 0;
 let usernames = [];
