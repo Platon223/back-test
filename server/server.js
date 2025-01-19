@@ -38,6 +38,8 @@ io.on('connection', (socket) => {
 
     console.log(usernames);
 
+     socket.emit('see-accounts', usernames);
+
 
     socket.emit('test', 'hello');
 
